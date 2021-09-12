@@ -1,0 +1,20 @@
+body{
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+.carousel{
+    min-height: 500px;
+}
+
+.carousel-item img{
+    height: 360px;
+    width: 640px !important;
+    margin-left: -100%;
+    margin-top: -50%;
+}
