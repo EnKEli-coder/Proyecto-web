@@ -1,3 +1,24 @@
+<?php
+
+session_start();
+
+require './model/db.php';
+
+if(isset($_SESSION['user_id'])){
+  $records= $connection->prepare('SELECT ID, Usuario, Pass FROM users WHERE ID=:id');
+  $records->bindParam(':id', $_SESSION['user_id']);
+  $records->execute();
+
+  $results= $records->fetch(PDO::FETCH_ASSOC);
+
+  $user = null;
+
+  if(count($results) > 0){
+    $user = $results;
+  }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,7 +35,11 @@
     <title>Registro documental</title>
 </head>
 <body>
+    <?php if(!empty($user)): ?>
+    <?php include './views/header_logged.php'?>
+    <?php else: ?>
     <?php include './views/header.php'?>
+    <?php endif; ?>
     <main>
       <?php include './controller/router.php'?>
     </main>

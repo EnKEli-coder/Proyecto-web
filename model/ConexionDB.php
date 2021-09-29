@@ -1,29 +1,13 @@
 <?php
 
-class conectaDB {
-    
-    public static function dbmysql() {
-        $db_host = 'localhost';
-        $db_user = 'root';
-        $db_password = '';
-        $db_db = 'blog';
+define('USER', 'root');
+define('PASSWORD', '');
+define('HOST', 'localhost');
+define('DATABASE', 'blog');
 
-        $mysqli = @new mysqli(
-            $db_host,
-            $db_user,
-            $db_password,
-            $db_db
-        );
-
-        if ($mysqli->connect_error) {
-            echo 'La conexión a la base de datos de MYSQL No es correcta.';
-            echo 'Errno: ' . $mysqli->connect_errno;
-            echo '<br>';
-            echo 'Error: ' . $mysqli->connect_error;
-            exit();
-        }
-        return $mysqli;
-    }    
-    
+try {
+    $connection = new PDO("mysql:host=".HOST.";dbname=".DATABASE, USER, PASSWORD);
+} catch (PDOException $e) {
+    exit("Error: " . $e->getMessage());
 }
 ?>

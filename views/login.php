@@ -1,22 +1,25 @@
 <?php
 
 include('./model/db.php');
-session_start();
+//session_start();
 
 if (isset($_POST['login'])) {
 
   $username = $_POST['username'];
   $password = $_POST['password'];
 
-  $query = mysqli_query($mysqli, "SELECT * FROM users WHERE Usuario='$username'");
+  $query = $connection->prepare("SELECT * FROM users WHERE Usuario=:username");
+  $query->bindParam("username", $username, PDO::PARAM_STR);
+  $query->execute();
 
-  $result = $query->fetch_assoc();
+  $result = $query->fetch(PDO::FETCH_ASSOC);
 
   if (!$result) {
       echo '<p class="error">Datos Erroneos</p>';
   } else {
       if (password_verify($password, $result['Pass'])) {
-          $_SESSION['user'] = $result['Usuario'];
+          $_SESSION['user_id'] = $result['ID'];
+          header('Location:?menu=home');
           echo '<p class="success">Logueo Exitoso</p>';
       } else {
           echo '<p class="error">Contraseña incorrecta</p>';

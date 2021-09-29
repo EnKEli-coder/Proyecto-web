@@ -1,7 +1,7 @@
 <?php
 
 include('./model/db.php');
-session_start();
+//session_start();
 
 if (isset($_POST['register'])) {
 
@@ -9,22 +9,24 @@ if (isset($_POST['register'])) {
     $password = $_POST['password'];
     $password_hash = password_hash($password, PASSWORD_BCRYPT);
 
-    $query = mysqli_query($mysqli,"SELECT * FROM users WHERE Usuario = '$username'");
-    if (mysqli_num_rows($query) > 0) {
+    $query = $connection->prepare("SELECT * FROM users WHERE Usuario = :username");
+    $query->bindParam("username", $username, PDO::PARAM_STR);
+    $query->execute();
+    if ($query->rowCount() > 0) {
         echo '<p class="error">El Nombre de usuario ya esta registrado</p>';
     }
 
-    if (mysqli_num_rows($query) == 0) {
-        $result = mysqli_query($mysqli, "INSERT INTO users(Usuario,Pass) VALUES ('$username','$password_hash')");
-
+    if ($query->rowCount() == 0) {
+        $query = $connection->prepare("INSERT INTO users(Usuario,Pass) VALUES (:username,:password_hash)");
+        $query->bindParam("username", $username, PDO::PARAM_STR);
+        $query->bindParam("password_hash", $password_hash, PDO::PARAM_STR);
+        $result = $query->execute();
         if ($result) {
             echo '<p class="success">Registro Exitoso</p>';
         } else {
             echo '<p class="error">Algo salio mal :c</p>';
         }
     }
-
-    $mysqli -> close();
 }
 
 ?>

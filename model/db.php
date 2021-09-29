@@ -3,18 +3,10 @@
   $db_user = 'root';
   $db_password = '';
   $db_db = 'blog';
- 
-  $mysqli = @new mysqli(
-    $db_host,
-    $db_user,
-    $db_password,
-    $db_db
-  );
 	
-  if ($mysqli->connect_error) {
-    echo 'Errno: '.$mysqli->connect_errno;
-    echo '<br>';
-    echo 'Error: '.$mysqli->connect_error;
-    exit();
-  }
+  try {
+    $connection = new PDO("mysql:host=$db_host;dbname=$db_db", $db_user, $db_password);
+} catch (PDOException $e) {
+    exit("Error: " . $e->getMessage());
+}
 ?>
