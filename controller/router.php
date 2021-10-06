@@ -28,6 +28,12 @@ switch ($var_getMenu){
         $sqlAlumnos = modelAlumnos::delete($_idalumno);
         header("location:?menu=alumnos");
         break;
+    case "edit":
+        $_idalumno = trim(filter_input(INPUT_GET, 'idalumno'));
+        require_once('./model/modelAlumnos.php');
+        $sqlAlumnos = modelAlumnos::show($_idalumno);
+        include_once './views/edit.php';
+        break;
     default:
         require_once('./views/home.php');
 }
